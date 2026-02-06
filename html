@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+<title>For You ❤️</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #ff4d6d, #12001a);
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
+
+/* Screens */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* Intro */
+.intro h1 {
+  font-size: 2.3rem;
+  animation: glow 2s infinite alternate;
+}
+
+.intro p {
+  margin-top: 12px;
+  opacity: 0.8;
+}
+
+.tap {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  animation: blink 1.5s infinite;
+}
+
+/* Middle */
+.middle h1 {
+  font-size: 2.2rem;
+  animation: glow 2s infinite alternate;
+}
+
+.middle p {
+  margin-top: 12px;
+  opacity: 0.85;
+}
+
+/* Question */
+.question h1 {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+}
+
+.buttons {
+  position: relative;
+  height: 200px;
+}
+
+button {
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+}
+
+#yes {
+  background: #ffccd5;
+  color: #8b0000;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+}
+
+#no {
+  background: #222;
+  color: white;
+}
+
+/* Final */
+.final h1 {
+  font-size: 2.4rem;
+  animation: pulse 1.5s infinite;
+}
+
+.final p {
+  margin-top: 15px;
+  font-size: 1.2rem;
+}
+
+/* Hearts */
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: float 4s linear forwards;
+}
+
+/* Animations */
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 25px #ffccd5; }
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-120vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO SCREEN -->
+<div class="screen intro active" id="intro">
+  <div>
+    <h1>Hey You ❤️</h1>
+    <p>I made something special…</p>
+    <div class="tap">Tap anywhere</div>
+  </div>
+</div>
+
+<!-- MIDDLE SCREEN -->
+<div class="screen middle" id="middle">
+  <div>
+    <h1>Wait a second… 💫</h1>
+    <p>I want to ask you something important</p>
+    <div class="tap">Tap to continue</div>
+  </div>
+</div>
+
+<!-- QUESTION SCREEN -->
+<div class="screen question" id="question">
+  <div>
+    <h1>Will you be my Valentine? 💌</h1>
+    <div class="buttons">
+      <button id="yes">YES 💖</button>
+      <button id="no">NO 🙄</button>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen final" id="final">
+  <div>
+    <h1>YAYYYYY 💕</h1>
+    <p>You just made me the happiest person 🥹</p>
+  </div>
+</div>
+
+<script>
+const intro = document.getElementById("intro");
+const middle = document.getElementById("middle");
+const question = document.getElementById("question");
+const finalScreen = document.getElementById("final");
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+
+/* Screen transitions */
+document.body.addEventListener("click", () => {
+  if (intro.classList.contains("active")) {
+    intro.classList.remove("active");
+    middle.classList.add("active");
+  } 
+  else if (middle.classList.contains("active")) {
+    middle.classList.remove("active");
+    question.classList.add("active");
+  }
+});
+
+let noClicks = 0;
+
+/* No button movement */
+noBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  noClicks++;
+
+  const maxX = window.innerWidth - 120;
+  const maxY = window.innerHeight - 120;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+
+  if (noClicks > 4) noBtn.innerText = "Why 😭";
+  if (noClicks > 7) noBtn.innerText = "You can't 😈";
+});
+
+/* Yes button */
+yesBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  question.classList.remove("active");
+  finalScreen.classList.add("active");
+  startHearts();
+});
+
+/* Heart explosion */
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerText = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.bottom = "-20px";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }, 150);
+}
+</script>
+
+</body>
+</html>
